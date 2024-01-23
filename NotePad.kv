@@ -1,0 +1,104 @@
+ScreenManagement:
+    id: manager
+    Home:
+        id: home
+    Note:
+        id: notes
+    Delete_screen:
+        id: delete_screen
+
+<Note_card>
+    note_id: self.note_id
+    note_title: self.note_title
+    note_content: self.note_content
+
+<Delete card>
+    note_id: self.note_id
+    note_title: self.note_title
+    note_content: self.note_content
+    deletion_status: self.deletion_status
+
+<Home>:
+    name: 'home'
+    on_enter: note_view.update_scroll()
+
+    GridLayout:
+        cols: 1
+        Label:
+            text: 'Список покупок'
+            size_hint: (.2, .1)
+        GridLayout:
+            rows: 1
+            size_hint: (.1, .1)
+
+            Button:
+                text: 'Добавить'
+                on_release: root.make_new_note()
+                size_hint: (.2, .1)
+            Button:
+                text: 'Удалить'
+                on_release: app.root.current='delete_screen'
+                size_hint: (.2, .2)
+
+        Note_view:
+            id: note_view
+
+<Note>:
+    name: 'notes'
+    note_id: self.note_id
+    GridLayout:
+        cols: 1
+
+        Label:
+            text: 'Сведения о товаре'
+            size_hint: (.2, .1)
+        GridLayout:
+            size_hint: (.2, .2)
+            rows: 1
+
+            Button:
+                text: 'Удалить'
+                on_release: root.delete_self()
+            Button:
+                text: 'Выход'
+                on_release: app.root.current = 'home'
+
+        TextInput:
+            id: note_title
+            hint_text: 'Товар' ########################################################################
+            size_hint: (.2, .2)
+        TextInput:
+            id: note_content
+            hint_text: 'Подробные сведения о товаре'
+            size_hint: (.1, .1)
+        Button:
+            text: 'Сохранить изменения'
+            pos_hint: {'right': 1}
+            size_hint: (.2, .2)
+            on_release: app.submit()
+
+
+<Delete_screen>:
+    name: 'delete_screen'
+    on_enter: delete_view.update_scroll()
+
+    GridLayout:
+        cols: 1
+        Label:
+            text: 'Удаление товара'
+            size_hint: (.2, .1)
+
+        Button:
+            text: 'Выход'
+            size_hint: .1, None
+            height: 50
+            on_release: root.cancel_delete()
+
+        Delete_scroll:
+            id: delete_view
+
+        Button:
+            text: 'Удалить'
+            size_hint: .1, None
+            height: 50
+            on_release: root.complete_deletion()
